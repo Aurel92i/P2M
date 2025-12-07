@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "expo": "~51.0.14",
+    "expo-constants": "~16.0.1",
     "expo-location": "~17.0.1",
     "expo-secure-store": "~13.0.1",
     "expo-status-bar": "~1.12.1",

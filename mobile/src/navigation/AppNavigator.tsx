@@ -7,6 +7,7 @@ import { SignupScreen } from '../screens/SignupScreen';
 import { DashboardScreen } from '../screens/DashboardScreen';
 import { NewListingScreen } from '../screens/NewListingScreen';
 import { ListingDetailScreen } from '../screens/ListingDetailScreen';
+import { MapTestScreen } from '../screens/MapTestScreen';
 
 export type RootStackParamList = {
   Splash: undefined;
@@ -15,6 +16,7 @@ export type RootStackParamList = {
   Dashboard: undefined;
   NewListing: undefined;
   ListingDetail: { id: string };
+  MapTest: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -29,6 +31,7 @@ export function AppNavigator() {
         <Stack.Screen name="Dashboard" component={DashboardScreen} options={{ title: 'Mes listings' }} />
         <Stack.Screen name="NewListing" component={NewListingScreen} options={{ title: 'Nouveau listing' }} />
         <Stack.Screen name="ListingDetail" component={ListingDetailScreen} options={{ title: 'Détail listing' }} />
+        <Stack.Screen name="MapTest" component={MapTestScreen} options={{ title: 'Test Google Maps' }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
