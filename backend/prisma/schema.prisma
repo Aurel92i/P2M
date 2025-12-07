@@ -1,0 +1,53 @@
+// Prisma schema for address route optimizer
+// Datasource assumes DATABASE_URL env variable
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String       @id @default(uuid())
+  email        String       @unique
+  passwordHash String
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  addressLists AddressList[]
+}
+
+model AddressList {
+  id           String                @id @default(uuid())
+  user         User                  @relation(fields: [userId], references: [id])
+  userId       String
+  label        String
+  createdAt    DateTime              @default(now())
+  updatedAt    DateTime              @updatedAt
+  addresses    Address[]
+  recipients   RouteEmailRecipient[]
+  startingNote String?
+}
+
+model Address {
+  id              String     @id @default(uuid())
+  addressList     AddressList @relation(fields: [addressListId], references: [id])
+  addressListId   String
+  rawText         String
+  formattedAddress String
+  latitude        Float?
+  longitude       Float?
+  orderIndex      Int        @default(0)
+  comment         String?
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+}
+
+model RouteEmailRecipient {
+  id            String      @id @default(uuid())
+  addressList   AddressList @relation(fields: [addressListId], references: [id])
+  addressListId String
+  email         String
+}
