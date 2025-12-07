@@ -14,6 +14,7 @@ export function DashboardScreen({ navigation }: NativeStackScreenProps<RootStack
   return (
     <View style={{ flex: 1 }}>
       <Button title="Nouveau listing" onPress={() => navigation.navigate('NewListing')} />
+      <Button title="Tester la carte" onPress={() => navigation.navigate('MapTest')} />
       <FlatList
         data={lists}
         keyExtractor={(item) => item.id}
