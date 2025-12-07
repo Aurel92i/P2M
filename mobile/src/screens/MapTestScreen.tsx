@@ -24,6 +24,7 @@ export function MapTestScreen() {
         if (status !== 'granted') {
           setStatusMessage('');
           setErrorMessage('Permission localisation refusée.');
+          setStatusMessage('Permission localisation refusée.');
           return;
         }
 
@@ -40,6 +41,7 @@ export function MapTestScreen() {
       } catch (error) {
         setStatusMessage('');
         setErrorMessage('Impossible de récupérer la position.');
+        setStatusMessage("Impossible de récupérer la position.");
       }
     };
 
@@ -102,6 +104,14 @@ export function MapTestScreen() {
         </Text>
       )}
       {providerHint && <Text style={styles.infoText}>{providerHint}</Text>}
+  const googleMapsApiKey = Constants.expoConfig?.extra?.googleMapsApiKey;
+  const isGoogleProviderEnabled = Platform.OS === 'ios' || Platform.OS === 'android';
+
+  return (
+    <View style={styles.container}>
+      {statusMessage && <Text style={styles.infoText}>{statusMessage}</Text>}
+      <Text style={styles.infoText}>Clé Google Maps chargée : {googleMapsApiKey ? 'Oui' : 'Non'}</Text>
+      <Text style={styles.infoText}>Provider Google activé : {isGoogleProviderEnabled ? 'Oui' : 'Non'}</Text>
       <View style={styles.mapContainer}>
         {region ? (
           <MapView
@@ -113,6 +123,7 @@ export function MapTestScreen() {
             <Marker coordinate={region} title="Position actuelle" />
           </MapView>
         ) : shouldShowLoader ? (
+        ) : statusMessage ? (
           <View style={styles.loaderContainer}>
             <ActivityIndicator size="large" />
           </View>

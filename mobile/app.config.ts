@@ -18,6 +18,10 @@ export default ({ config }: ConfigContext): ExpoConfig => {
   } else if (!envGoogleMapsKey) {
     console.warn('Aucune clé Google Maps dans l\'environnement : utilisation de la clé fournie en secours.');
   }
+import { ExpoConfig, ConfigContext } from 'expo/config';
+
+export default ({ config }: ConfigContext): ExpoConfig => {
+  const googleMapsKey = process.env.GOOGLE_MAPS_KEY;
 
   return {
     ...config,
@@ -26,6 +30,7 @@ export default ({ config }: ConfigContext): ExpoConfig => {
     extra: {
       ...config.extra,
       googleMapsApiKey: googleMapsKey ?? ''
+      googleMapsApiKey: googleMapsKey
     },
     android: {
       ...config.android,
