@@ -1,8 +1,13 @@
-# Backend environment configuration (copy to .env and fill real values)
-PORT=4000
-JWT_SECRET=Suresnes1618**Eliecamille123
-JWT_EXPIRES_IN=d
-GOOGLE_MAPS_KEY=AIzaSyCJmYRiBoF4lVWQIOPhx1vI4ExlRmJBOPg
-GOOGLE_VISION_KEY=AIzaSyCJmYRiBoF4lVWQIOPhx1vI4ExlRmJBOPg
-EMAIL_FROM=
-SMTP_URL=smtp:
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+export const env = {
+  port: process.env.PORT ?? '4000',
+  jwtSecret: process.env.JWT_SECRET ?? 'dev-secret',
+  jwtExpiresIn: process.env.JWT_EXPIRES_IN ?? '30d',
+  googleVisionKey: process.env.GOOGLE_VISION_KEY ?? '',
+  googleMapsKey: process.env.GOOGLE_MAPS_KEY ?? '',
+  emailFrom: process.env.EMAIL_FROM ?? '',
+  smtpUrl: process.env.SMTP_URL ?? '',
+};

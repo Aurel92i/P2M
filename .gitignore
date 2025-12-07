@@ -5,3 +5,25 @@ mobile/node_modules/
 npm-debug.log*
 .expo/
 .expo-shared/
+
+
+# Node
+node_modules/
+
+# Environment files
+.env
+*.env
+*.env.*
+backend/.env
+mobile/.env
+mobile/.env.txt
+
+# Expo / React Native junk
+.expo/
+.expo-shared/
+.metadata/
+index.js.json
+
+# Optionnel : locks si tu ne veux pas les versionner
+# backend/package-lock.json
+# mobile/package-lock.json

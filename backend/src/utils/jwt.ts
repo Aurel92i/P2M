@@ -6,10 +6,19 @@ export interface JwtPayload {
   email: string;
 }
 
-export function signJwt(payload: JwtPayload) {
-  return jwt.sign(payload, env.jwtSecret, { expiresIn: env.jwtExpiresIn });
-}
+const jwtSecret = env.jwtSecret || 'dev-secret';
 
-export function verifyJwt(token: string): JwtPayload {
-  return jwt.verify(token, env.jwtSecret) as JwtPayload;
-}
+export const signToken = (payload: JwtPayload) => {
+  return jwt.sign(payload, jwtSecret, {
+    // "7d", "1h", etc. → accepté au runtime par jsonwebtoken
+    expiresIn: env.jwtExpiresIn as any,
+  });
+};
+
+export const verifyToken = (token: string): JwtPayload => {
+  return jwt.verify(token, jwtSecret) as JwtPayload;
+};
+
+// 🔽 Aliases pour compatibilité avec le reste du code
+export const signJwt = signToken;
+export const verifyJwt = verifyToken;

@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import { prisma } from '../../utils/prisma';
-import { signJwt } from '../../utils/jwt';
+import { signToken } from '../../utils/jwt';
 import { LoginDto, SignupDto } from './auth.dto';
 
 export class AuthService {
@@ -11,7 +11,7 @@ export class AuthService {
     }
     const passwordHash = await bcrypt.hash(data.password, 10);
     const user = await prisma.user.create({ data: { email: data.email, passwordHash } });
-    const token = signJwt({ userId: user.id, email: user.email });
+    const token = signToken({ userId: user.id, email: user.email });
     return { token };
   }
 
@@ -24,7 +24,7 @@ export class AuthService {
     if (!valid) {
       throw new Error('Invalid credentials');
     }
-    const token = signJwt({ userId: user.id, email: user.email });
+    const token = signToken({ userId: user.id, email: user.email });
     return { token };
   }
 }
