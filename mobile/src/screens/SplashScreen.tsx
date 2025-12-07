@@ -1,21 +1,55 @@
 import React, { useEffect } from 'react';
-import { ActivityIndicator, View } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { useAuthStore } from '../store/useAuthStore';
+import { LoadingSpinner } from '../components/ui';
+import { colors, typography } from '../theme';
 
 export function SplashScreen({ navigation }: NativeStackScreenProps<RootStackParamList, 'Splash'>) {
-  const { bootstrap, token } = useAuthStore();
+  const { bootstrap, isAuthenticated } = useAuthStore();
 
   useEffect(() => {
     bootstrap().then(() => {
-      navigation.replace(token ? 'Dashboard' : 'Login');
+      // Small delay for smooth transition
+      setTimeout(() => {
+        navigation.replace(isAuthenticated ? 'Dashboard' : 'Welcome');
+      }, 500);
     });
-  }, [bootstrap, navigation, token]);
+  }, [bootstrap, navigation, isAuthenticated]);
 
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <ActivityIndicator size="large" />
+    <View style={styles.container}>
+      <Text style={styles.logo}>🗺️</Text>
+      <Text style={styles.title}>P2M</Text>
+      <Text style={styles.subtitle}>Pro My Maps</Text>
+      <LoadingSpinner message="Chargement..." style={styles.loader} />
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.primary,
+  },
+  logo: {
+    fontSize: 96,
+    marginBottom: 16,
+  },
+  title: {
+    ...typography.h1,
+    color: colors.textInverse,
+    marginBottom: 8,
+  },
+  subtitle: {
+    ...typography.bodyLarge,
+    color: colors.textInverse,
+    opacity: 0.9,
+  },
+  loader: {
+    marginTop: 40,
+  },
+});
