@@ -22,9 +22,8 @@ export function MapTestScreen() {
         const { status } = await Location.requestForegroundPermissionsAsync();
 
         if (status !== 'granted') {
-          setStatusMessage('');
           setErrorMessage('Permission localisation refusée.');
-          setStatusMessage('Permission localisation refusée.');
+          setStatusMessage('');
           return;
         }
 
@@ -39,9 +38,8 @@ export function MapTestScreen() {
         });
         setStatusMessage('');
       } catch (error) {
-        setStatusMessage('');
         setErrorMessage('Impossible de récupérer la position.');
-        setStatusMessage("Impossible de récupérer la position.");
+        setStatusMessage('');
       }
     };
 
@@ -53,24 +51,12 @@ export function MapTestScreen() {
     Constants.manifest2?.extra?.googleMapsApiKey ??
     Constants.manifest?.extra?.googleMapsApiKey ??
     '';
+
   const isExpoGo = Constants.appOwnership === 'expo';
   const platformSupportsGoogleProvider = Platform.OS === 'ios' || Platform.OS === 'android';
   const hasGoogleKey = Boolean(googleMapsApiKey);
   const isGoogleProviderEnabled = platformSupportsGoogleProvider && hasGoogleKey && !isExpoGo;
-  const providerStatus = isGoogleProviderEnabled
-    ? 'Oui'
-    : !platformSupportsGoogleProvider
-      ? 'Non (plateforme non supportée)'
-      : isExpoGo
-        ? 'Non (nécessite un build dev/production, pas Expo Go)'
-        : 'Non (clé absente)';
-  const providerHint = !platformSupportsGoogleProvider
-    ? null
-    : isGoogleProviderEnabled
-      ? null
-      : isExpoGo
-        ? 'Utilisez un build dev client ou EAS pour activer le provider Google.'
-        : "Ajoutez GOOGLE_MAPS_KEY dans l'environnement et reconstruisez l'app pour activer le provider Google.";
+
   const activeStatusMessage = errorMessage ?? statusMessage;
   const shouldShowLoader = !region && !errorMessage && Boolean(statusMessage);
 
@@ -79,12 +65,8 @@ export function MapTestScreen() {
       <View style={styles.container}>
         <Text style={styles.infoText}>Google Maps n'est pas disponible dans Expo Go.</Text>
         <Text style={styles.infoText}>
-          Utilisez un Dev Client (`expo run:android` / `expo run:ios`) ou un build EAS pour tester l'affichage des tuiles Google
-          et de la position.
-        </Text>
-        <Text style={styles.infoText}>
-          Si vous voyez des erreurs de compilation JS dans Expo Go, relancez l'application après avoir construit un Dev Client;
-          le code de la carte nécessite le native module Google Maps absent d'Expo Go.
+          Utilisez un Dev Client (`expo run:android` / `expo run:ios`) ou un build EAS pour tester 
+          l'affichage des tuiles Google et de la position.
         </Text>
       </View>
     );
@@ -92,26 +74,13 @@ export function MapTestScreen() {
 
   return (
     <View style={styles.container}>
-      {activeStatusMessage && <Text style={styles.infoText}>{activeStatusMessage}</Text>}
+      {activeStatusMessage ? <Text style={styles.infoText}>{activeStatusMessage}</Text> : null}
       <Text style={styles.infoText}>
         Clé Google Maps chargée : {googleMapsApiKey ? 'Oui' : 'Non (GOOGLE_MAPS_KEY manquante)'}
       </Text>
-      <Text style={styles.infoText}>Provider Google activé : {providerStatus}</Text>
-      {isExpoGo && (
-        <Text style={styles.infoText}>
-          Exécution dans Expo Go : le provider Google n'est pas disponible. Utilisez un Dev Client ou un build EAS pour valider
-          les tuiles Google.
-        </Text>
-      )}
-      {providerHint && <Text style={styles.infoText}>{providerHint}</Text>}
-  const googleMapsApiKey = Constants.expoConfig?.extra?.googleMapsApiKey;
-  const isGoogleProviderEnabled = Platform.OS === 'ios' || Platform.OS === 'android';
-
-  return (
-    <View style={styles.container}>
-      {statusMessage && <Text style={styles.infoText}>{statusMessage}</Text>}
-      <Text style={styles.infoText}>Clé Google Maps chargée : {googleMapsApiKey ? 'Oui' : 'Non'}</Text>
-      <Text style={styles.infoText}>Provider Google activé : {isGoogleProviderEnabled ? 'Oui' : 'Non'}</Text>
+      <Text style={styles.infoText}>
+        Provider Google activé : {isGoogleProviderEnabled ? 'Oui' : 'Non'}
+      </Text>
       <View style={styles.mapContainer}>
         {region ? (
           <MapView
@@ -123,7 +92,6 @@ export function MapTestScreen() {
             <Marker coordinate={region} title="Position actuelle" />
           </MapView>
         ) : shouldShowLoader ? (
-        ) : statusMessage ? (
           <View style={styles.loaderContainer}>
             <ActivityIndicator size="large" />
           </View>
