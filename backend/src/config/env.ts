@@ -1,16 +1,8 @@
-import dotenv from 'dotenv';
-
-dotenv.config();
-
-export const env = {
+# Backend environment configuration (copy to .env and fill real values)
 PORT=4000
-JWT_SECRET=dev-secret
-JWT_EXPIRES_IN=7d
-
-GOOGLE_MAPS_KEY=AIzaSyCImYRBo4fWWQIOPhrxV14ExRmJBO9p
-GOOGLE_VISION_KEY=AIzaSyCImYRBo4fWWQIOPhrxV14ExRmJBO9p
-
-EMAIL_FROM=no-reply@example.com
-SMTP_URL=smtp://user:pass@mail.example.com
-
-};
+JWT_SECRET=Suresnes1618**Eliecamille123
+JWT_EXPIRES_IN=d
+GOOGLE_MAPS_KEY=AIzaSyCJmYRiBoF4lVWQIOPhx1vI4ExlRmJBOPg
+GOOGLE_VISION_KEY=AIzaSyCJmYRiBoF4lVWQIOPhx1vI4ExlRmJBOPg
+EMAIL_FROM=
+SMTP_URL=smtp:
