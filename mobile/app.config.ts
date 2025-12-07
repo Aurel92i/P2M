@@ -21,14 +21,25 @@ export default ({ config }: ConfigContext): ExpoConfig => {
 
   return {
     ...config,
-    name: config.name ?? 'route-optimizer-mobile',
-    slug: config.slug ?? 'route-optimizer-mobile',
+    name: config.name ?? 'P2M',
+    slug: config.slug ?? 'p2m',
+    version: '1.0.0',
+    orientation: 'portrait',
+    icon: './assets/icon.png',
+    userInterfaceStyle: 'automatic',
+    splash: {
+      image: './assets/splash.png',
+      resizeMode: 'contain',
+      backgroundColor: '#2563EB'
+    },
     extra: {
       ...config.extra,
       googleMapsApiKey: googleMapsKey
     },
     android: {
       ...config.android,
+      package: 'com.p2m.app',
+      permissions: ['ACCESS_FINE_LOCATION', 'ACCESS_COARSE_LOCATION', 'CAMERA'],
       config: {
         ...(config.android?.config ?? {}),
         googleMaps: {
@@ -39,10 +50,32 @@ export default ({ config }: ConfigContext): ExpoConfig => {
     },
     ios: {
       ...config.ios,
+      supportsTablet: true,
+      bundleIdentifier: 'com.p2m.app',
+      infoPlist: {
+        NSLocationWhenInUseUsageDescription: 'P2M utilise votre position pour optimiser vos itinéraires',
+        NSLocationAlwaysUsageDescription: 'P2M utilise votre position pour optimiser vos itinéraires',
+        NSCameraUsageDescription: 'P2M utilise la caméra pour scanner les adresses',
+        NSPhotoLibraryUsageDescription: 'P2M accède à vos photos pour scanner les adresses',
+        NSFaceIDUsageDescription: 'P2M utilise Face ID pour sécuriser votre connexion'
+      },
       config: {
         ...(config.ios?.config ?? {}),
         googleMapsApiKey: googleMapsKey
       }
-    }
+    },
+    plugins: [
+      'expo-font',
+      'expo-secure-store',
+      'expo-local-authentication',
+      'expo-location',
+      [
+        'expo-notifications',
+        {
+          icon: './assets/notification-icon.png',
+          color: '#2563EB'
+        }
+      ]
+    ]
   };
 };
