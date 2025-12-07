@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import { ExpoConfig, ConfigContext } from 'expo/config';
 
-const FALLBACK_GOOGLE_MAPS_KEY = 'AIzaSyCJmYRiBoF4lVWQIOPhx1vI4ExlRmJBOPg';
+const FALLBACK_GOOGLE_MAPS_KEY = AIzaSyCJmYRiBoF4lVWQIOPhx1vI4ExlRmJBOPg;
 
 export default ({ config }: ConfigContext): ExpoConfig => {
   const envGoogleMapsKey = process.env.GOOGLE_MAPS_KEY;
