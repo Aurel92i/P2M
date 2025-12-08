@@ -1,6 +1,17 @@
 export interface SignupDto {
   email: string;
   password: string;
+  firstName?: string;
+  lastName?: string;
+  phone?: string;
+}
+
+export interface RegisterDto {
+  email: string;
+  password: string;
+  firstName?: string;
+  lastName?: string;
+  phone?: string;
 }
 
 export interface LoginDto {
@@ -10,4 +21,11 @@ export interface LoginDto {
 
 export interface AuthResponse {
   token: string;
+  user: {
+    id: string;
+    email: string;
+    firstName?: string;
+    lastName?: string;
+    phone?: string;
+  };
 }
