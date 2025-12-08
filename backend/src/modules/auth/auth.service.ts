@@ -81,6 +81,29 @@ export class AuthService {
       },
     };
   }
+
+  async getCurrentUser(userId: string) {
+    const user = await prisma.user.findUnique({ where: { id: userId } });
+    if (!user) {
+      throw new Error('User not found');
+    }
+    return {
+      id: user.id,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      phone: user.phone,
+    };
+  }
+
+  async refreshToken(userId: string, email: string) {
+    const user = await prisma.user.findUnique({ where: { id: userId } });
+    if (!user) {
+      throw new Error('User not found');
+    }
+    const token = signToken({ userId: user.id, email: user.email });
+    return { token };
+  }
 }
 
 export const authService = new AuthService();

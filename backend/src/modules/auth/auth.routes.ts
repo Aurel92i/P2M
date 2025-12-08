@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { authService } from './auth.service';
 import { LoginDto, SignupDto, RegisterDto } from './auth.dto';
+import { requireAuth, AuthRequest } from '../../middlewares/auth';
 
 export const authRouter = Router();
 
@@ -31,5 +32,26 @@ authRouter.post('/login', async (req, res) => {
     res.json(result);
   } catch (error: any) {
     res.status(401).json({ message: error.message || 'Login failed' });
+  }
+});
+
+authRouter.get('/me', requireAuth, async (req: AuthRequest, res) => {
+  try {
+    const userId = req.user!.id;
+    const user = await authService.getCurrentUser(userId);
+    res.json(user);
+  } catch (error: any) {
+    res.status(404).json({ message: error.message || 'User not found' });
+  }
+});
+
+authRouter.post('/refresh', requireAuth, async (req: AuthRequest, res) => {
+  try {
+    const userId = req.user!.id;
+    const email = req.user!.email;
+    const result = await authService.refreshToken(userId, email);
+    res.json(result);
+  } catch (error: any) {
+    res.status(401).json({ message: error.message || 'Token refresh failed' });
   }
 });
