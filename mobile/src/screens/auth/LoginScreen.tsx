@@ -46,7 +46,7 @@ export function LoginScreen({
   const onSubmit = async (data: LoginFormData) => {
     try {
       await login(data.email, data.password);
-      navigation.replace('Dashboard');
+      navigation.replace('Main');
     } catch (error: any) {
       Alert.alert('Erreur', error.message || 'Une erreur est survenue');
     }

@@ -92,7 +92,7 @@ export function RegisterScreen({
         lastName: data.lastName,
         phone: data.phone,
       });
-      navigation.replace('Dashboard');
+      navigation.replace('Main');
     } catch (error: any) {
       Alert.alert('Erreur', error.message || 'Une erreur est survenue');
     }
