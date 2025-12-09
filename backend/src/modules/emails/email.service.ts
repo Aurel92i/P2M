@@ -3,7 +3,7 @@ import { AddressList, Address, RouteEmailRecipient } from '@prisma/client';
 import { env } from '../../config/env';
 
 class EmailService {
-  private transporter = env.smtpUrl
+  private transporter = env.smtpUrl && env.smtpUrl.length > 0
     ? nodemailer.createTransport(env.smtpUrl)
     : null;
 
