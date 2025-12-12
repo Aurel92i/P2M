@@ -1,8 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Platform, StyleSheet, Text, View } from 'react-native';
-import MapView, { Marker, PROVIDER_GOOGLE, Region } from 'react-native-maps';
 import * as Location from 'expo-location';
 import Constants from 'expo-constants';
+
+// Import MapView only on native platforms
+let MapView: any;
+let Marker: any;
+let PROVIDER_GOOGLE: any;
+if (Platform.OS !== 'web') {
+  const MapModule = require('react-native-maps');
+  MapView = MapModule.default;
+  Marker = MapModule.Marker;
+  PROVIDER_GOOGLE = MapModule.PROVIDER_GOOGLE;
+}
+
+type Region = {
+  latitude: number;
+  longitude: number;
+  latitudeDelta: number;
+  longitudeDelta: number;
+};
 
 const DEFAULT_REGION: Region = {
   latitude: 48.8566,
@@ -60,12 +77,23 @@ export function MapTestScreen() {
   const activeStatusMessage = errorMessage ?? statusMessage;
   const shouldShowLoader = !region && !errorMessage && Boolean(statusMessage);
 
+  if (Platform.OS === 'web') {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.infoText}>Google Maps n'est pas disponible sur le web.</Text>
+        <Text style={styles.infoText}>
+          Utilisez l'application mobile pour tester la carte.
+        </Text>
+      </View>
+    );
+  }
+
   if (isExpoGo) {
     return (
       <View style={styles.container}>
         <Text style={styles.infoText}>Google Maps n'est pas disponible dans Expo Go.</Text>
         <Text style={styles.infoText}>
-          Utilisez un Dev Client (`expo run:android` / `expo run:ios`) ou un build EAS pour tester 
+          Utilisez un Dev Client (`expo run:android` / `expo run:ios`) ou un build EAS pour tester
           l'affichage des tuiles Google et de la position.
         </Text>
       </View>

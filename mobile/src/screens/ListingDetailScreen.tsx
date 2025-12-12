@@ -1,11 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, StyleSheet, TextInput, Button, Alert, ScrollView } from 'react-native';
-import MapView, { Marker } from 'react-native-maps';
+import { View, Text, FlatList, StyleSheet, TextInput, Button, Alert, ScrollView, Platform } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
 import { apiClient } from '../services/apiClient';
 import { Address, AddressList } from '../types/entities';
 import * as Location from 'expo-location';
+
+// Import MapView only on native platforms
+let MapView: any;
+let Marker: any;
+if (Platform.OS !== 'web') {
+  const MapModule = require('react-native-maps');
+  MapView = MapModule.default;
+  Marker = MapModule.Marker;
+}
 
 export function ListingDetailScreen({ route }: NativeStackScreenProps<RootStackParamList, 'ListingDetail'>) {
   const { id } = route.params;
@@ -113,15 +121,22 @@ export function ListingDetailScreen({ route }: NativeStackScreenProps<RootStackP
         )}
       />
       <Text style={styles.subtitle}>Carte</Text>
-      <MapView style={{ height: 200 }}>
-        {list.addresses.map(
-          (addr) =>
-            addr.latitude &&
-            addr.longitude && (
-              <Marker key={addr.id} coordinate={{ latitude: addr.latitude, longitude: addr.longitude }} title={addr.formattedAddress} />
-            )
-        )}
-      </MapView>
+      {Platform.OS !== 'web' && MapView ? (
+        <MapView style={{ height: 200 }}>
+          {list.addresses.map(
+            (addr) =>
+              addr.latitude &&
+              addr.longitude && (
+                <Marker key={addr.id} coordinate={{ latitude: addr.latitude, longitude: addr.longitude }} title={addr.formattedAddress} />
+              )
+          )}
+        </MapView>
+      ) : (
+        <View style={{ height: 200, justifyContent: 'center', alignItems: 'center', backgroundColor: '#f0f0f0', borderRadius: 8 }}>
+          <Text>🗺️</Text>
+          <Text style={{ marginTop: 8, color: '#666' }}>La carte n'est pas disponible sur le web</Text>
+        </View>
+      )}
       <Text style={styles.subtitle}>Envoyer par email</Text>
       <TextInput style={styles.input} placeholder="email1@example.com,email2@example.com" value={recipients} onChangeText={setRecipients} />
       <Button title="Envoyer" onPress={sendEmail} />
