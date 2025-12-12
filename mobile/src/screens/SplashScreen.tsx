@@ -13,7 +13,7 @@ export function SplashScreen({ navigation }: NativeStackScreenProps<RootStackPar
     bootstrap().then(() => {
       // Small delay for smooth transition
       setTimeout(() => {
-        navigation.replace(isAuthenticated ? 'Dashboard' : 'Welcome');
+        navigation.replace(isAuthenticated ? 'Main' : 'Welcome');
       }, 500);
     });
   }, [bootstrap, navigation, isAuthenticated]);
