@@ -3,9 +3,16 @@ import { AddressList, Address, RouteEmailRecipient } from '@prisma/client';
 import { env } from '../../config/env';
 
 class EmailService {
-  private transporter = nodemailer.createTransport(env.smtpUrl);
+  private transporter = env.smtpUrl && env.smtpUrl.length > 0
+    ? nodemailer.createTransport(env.smtpUrl)
+    : null;
 
   async sendRouteEmail(list: AddressList & { addresses: Address[]; recipients?: RouteEmailRecipient[] }, recipients: string[]) {
+    if (!this.transporter) {
+      console.warn('Email service not configured (SMTP_URL missing). Skipping email send.');
+      return;
+    }
+
     const ordered = [...list.addresses].sort((a, b) => a.orderIndex - b.orderIndex);
     const html = `
       <h3>${list.label}</h3>
