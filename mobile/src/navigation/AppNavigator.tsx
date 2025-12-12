@@ -11,6 +11,9 @@ import { LoginScreen } from '../screens/auth/LoginScreen';
 import { RegisterScreen } from '../screens/auth/RegisterScreen';
 import { ForgotPasswordScreen } from '../screens/auth/ForgotPasswordScreen';
 import { DashboardScreen } from '../screens/DashboardScreen';
+import { RoutesScreen } from '../screens/RoutesScreen';
+import { ClientsScreen } from '../screens/ClientsScreen';
+import { ProfileScreen } from '../screens/ProfileScreen';
 import { NewListingScreen } from '../screens/NewListingScreen';
 import { ListingDetailScreen } from '../screens/ListingDetailScreen';
 import { MapTestScreen } from '../screens/MapTestScreen';
@@ -38,19 +41,6 @@ export type MainTabParamList = {
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator<MainTabParamList>();
-
-// Temporary placeholder screens for tabs (will be created later)
-function RoutesScreen() {
-  return <DashboardScreen />;
-}
-
-function ClientsScreen() {
-  return <DashboardScreen />;
-}
-
-function ProfileScreen() {
-  return <DashboardScreen />;
-}
 
 function MainTabs() {
   return (

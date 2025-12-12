@@ -7,16 +7,18 @@ import { LoadingSpinner } from '../components/ui';
 import { colors, typography } from '../theme';
 
 export function SplashScreen({ navigation }: NativeStackScreenProps<RootStackParamList, 'Splash'>) {
-  const { bootstrap, isAuthenticated } = useAuthStore();
+  const { bootstrap } = useAuthStore();
 
   useEffect(() => {
     bootstrap().then(() => {
       // Small delay for smooth transition
       setTimeout(() => {
+        // Read the current auth state after bootstrap completes
+        const isAuthenticated = useAuthStore.getState().isAuthenticated;
         navigation.replace(isAuthenticated ? 'Main' : 'Welcome');
       }, 500);
     });
-  }, [bootstrap, navigation, isAuthenticated]);
+  }, [bootstrap, navigation]);
 
   return (
     <View style={styles.container}>

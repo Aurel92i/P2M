@@ -1,11 +1,18 @@
 import React, { useEffect } from 'react';
 import { View, Text, Button, FlatList, TouchableOpacity, StyleSheet, RefreshControl } from 'react-native';
+import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
+import { CompositeScreenProps } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../navigation/AppNavigator';
+import { MainTabParamList, RootStackParamList } from '../navigation/AppNavigator';
 import { useListingsStore } from '../store/useListingsStore';
 
-export function DashboardScreen({ navigation }: NativeStackScreenProps<RootStackParamList, 'Dashboard'>) {
-  const { lists, fetchLists, loading } = useListingsStore();
+type DashboardScreenProps = CompositeScreenProps<
+  BottomTabScreenProps<MainTabParamList, 'Dashboard'>,
+  NativeStackScreenProps<RootStackParamList>
+>;
+
+export function DashboardScreen({ navigation }: DashboardScreenProps) {
+  const { lists, fetchLists, loading, error } = useListingsStore();
 
   useEffect(() => {
     fetchLists();
@@ -15,6 +22,12 @@ export function DashboardScreen({ navigation }: NativeStackScreenProps<RootStack
     <View style={{ flex: 1 }}>
       <Button title="Nouveau listing" onPress={() => navigation.navigate('NewListing')} />
       <Button title="Tester la carte" onPress={() => navigation.navigate('MapTest')} />
+      {error && (
+        <View style={styles.errorContainer}>
+          <Text style={styles.errorText}>{error}</Text>
+          <Button title="Réessayer" onPress={fetchLists} />
+        </View>
+      )}
       <FlatList
         data={lists}
         keyExtractor={(item) => item.id}
@@ -32,5 +45,17 @@ export function DashboardScreen({ navigation }: NativeStackScreenProps<RootStack
 
 const styles = StyleSheet.create({
   card: { padding: 16, borderBottomWidth: 1, borderColor: '#eee' },
-  cardTitle: { fontSize: 18, fontWeight: 'bold' }
+  cardTitle: { fontSize: 18, fontWeight: 'bold' },
+  errorContainer: {
+    padding: 16,
+    margin: 8,
+    backgroundColor: '#fee',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#fcc'
+  },
+  errorText: {
+    color: '#c00',
+    marginBottom: 8
+  }
 });
