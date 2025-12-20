@@ -60,20 +60,14 @@ export function MapTestScreen() {
   const activeStatusMessage = errorMessage ?? statusMessage;
   const shouldShowLoader = !region && !errorMessage && Boolean(statusMessage);
 
-  if (isExpoGo) {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.infoText}>Google Maps n'est pas disponible dans Expo Go.</Text>
-        <Text style={styles.infoText}>
-          Utilisez un Dev Client (`expo run:android` / `expo run:ios`) ou un build EAS pour tester 
-          l'affichage des tuiles Google et de la position.
-        </Text>
-      </View>
-    );
-  }
-
   return (
     <View style={styles.container}>
+      {isExpoGo ? (
+        <Text style={styles.infoText}>
+          Mode Expo Go : les tuiles Google nécessitent un Dev Client ou un build EAS, mais vous pouvez
+          tester la récupération de localisation et les autres écrans via le QR code Expo Go.
+        </Text>
+      ) : null}
       {activeStatusMessage ? <Text style={styles.infoText}>{activeStatusMessage}</Text> : null}
       <Text style={styles.infoText}>
         Clé Google Maps chargée : {googleMapsApiKey ? 'Oui' : 'Non (GOOGLE_MAPS_KEY manquante)'}
